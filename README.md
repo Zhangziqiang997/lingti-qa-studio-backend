@@ -1,178 +1,139 @@
-# SpringBoot 项目初始模板
+# 灵题工坊 - AI答题应用制作平台
 
+> 基于Spring Boot + AI大模型的智能测评系统学习项目  
 > 作者：[Zachary](https://github.com/Zhangziqiang997/)
 
-基于 Java SpringBoot 的项目初始模板，整合了常用框架和主流业务的示例代码。
+## 📋 项目简介
 
-只需 1 分钟即可完成内容网站的后端！！！大家还可以在此基础上快速开发自己的项目。
+这是一个基于 Spring Boot 开发的智能测评系统，集成了ChatGLM
+大模型，支持创建多种类型的测评应用（心理测试、知识问答、能力评估等）。通过学习这个项目，我深入理解了现代后端开发的核心技术栈和AI应用集成的实践方法。
 
-## 模板特点
+## ✨ 技术亮点
 
-### 主流框架 & 特性
+- **AI 集成**：智谱清言大模型调用，实现智能评分
+- **架构设计**：分层架构 + 策略模式，支持灵活扩展
+- **性能优化**：分库分表 + 多级缓存，支持高并发
+- **工程规范**：统一响应、异常处理、权限控制
 
-- Spring Boot 2.7.x（贼新）
-- Spring MVC
-- MyBatis + MyBatis Plus 数据访问（开启分页）
-- Spring Boot 调试工具和项目处理器
-- Spring AOP 切面编程
-- Spring Scheduler 定时任务
-- Spring 事务注解
+## 🛠️ 技术栈
+
+### 后端框架
+- **Spring Boot 2.7.2** - 核心框架
+- **MyBatis Plus 3.5.2** - ORM框架，简化数据库操作
+- **ShardingSphere** - 分库分表中间件
 
 ### 数据存储
+- **MySQL 8.0** - 主数据库
+- **Redis** - 缓存和会话存储
+- **Elasticsearch** - 搜索引擎
+- **腾讯云 COS** - 对象存储
 
-- MySQL 数据库
-- Redis 内存数据库
-- Elasticsearch 搜索引擎
-- 腾讯云 COS 对象存储
+### AI集成
+- **GLM大模型 API** - 智能评分核心
 
-### 工具类
+### 开发工具
+- **Lombok**
+- **Hutool**
+- **Knife4j**
+- **Redisson**
 
-- Easy Excel 表格处理
-- Hutool 工具库
-- Apache Commons Lang3 工具类
-- Lombok 注解
+## 🏛️ 系统架构
 
-### 业务特性
-
-- 业务代码生成器（支持自动生成 Service、Controller、数据模型代码）
-- Spring Session Redis 分布式登录
-- 全局请求响应拦截器（记录日志）
-- 全局异常处理器
-- 自定义错误码
-- 封装通用响应类
-- Swagger + Knife4j 接口文档
-- 自定义权限注解 + 全局校验
-- 全局跨域处理
-- 长整数丢失精度解决
-- 多环境配置
-
-
-## 业务功能
-
-- 提供示例 SQL（用户、帖子、帖子点赞、帖子收藏表）
-- 用户登录、注册、注销、更新、检索、权限管理
-- 帖子创建、删除、编辑、更新、数据库检索、ES 灵活检索
-- 帖子点赞、取消点赞
-- 帖子收藏、取消收藏、检索已收藏帖子
-- 帖子全量同步 ES、增量同步 ES 定时任务
-- 支持微信开放平台登录
-- 支持微信公众号订阅、收发消息、设置菜单
-- 支持分业务的文件上传
-
-### 单元测试
-
-- JUnit5 单元测试
-- 示例单元测试类
-
-### 架构设计
-
-- 合理分层
-
-
-## 快速上手
-
-> 所有需要修改的地方鱼皮都标记了 `todo`，便于大家找到修改的位置~
-
-### MySQL 数据库
-
-1）修改 `application.yml` 的数据库配置为你自己的：
-
-```yml
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/yudada
-    username: root
-    password: 123456
+### 分层架构设计
+```
+┌─────────────┐
+│ Controller  │ ← 接口层：处理HTTP请求，参数校验
+├─────────────┤
+│  Service    │ ← 业务层：核心业务逻辑处理
+├─────────────┤
+│  Manager    │ ← 管理层：第三方服务调用（AI、COS等）
+├─────────────┤
+│  Mapper     │ ← 数据层：数据库操作
+└─────────────┘
 ```
 
-2）执行 `sql/create_table.sql` 中的数据库语句，自动创建库表
+### 🎨 设计模式应用
+- **策略模式**：评分策略解耦，支持AI评分和规则评分
+- **AOP 切面**：权限校验和日志记录的横切关注点
+- **模板方法**：统一响应处理和异常处理
 
-3）启动项目，访问 `http://localhost:8101/api/doc.html` 即可打开接口文档，不需要写前端就能在线调试接口了~
+## 🚀 核心功能模块
 
-![](doc/swagger.png)
+### 1. AI评分系统
+- **大模型集成**：智谱清言API调用封装
+- **请求处理**：支持同步/异步评分请求
+- **稳定性控制**：temperature参数调节，确保结果一致性
 
-### Redis 分布式登录
+### 2. 动态评分策略
+- **AI评分**：基于大模型的智能评分
+- **规则评分**：预设规则匹配评分
+- **策略切换**：运行时动态选择评分策略
 
-1）修改 `application.yml` 的 Redis 配置为你自己的：
+### 3. 用户权限管理
+- **角色权限**：管理员、普通用户权限控制
+- **登录认证**：JWT token + Session双重验证
+- **操作日志**：AOP记录用户关键操作
 
-```yml
-spring:
-  redis:
-    database: 1
-    host: localhost
-    port: 6379
-    timeout: 5000
-    password: 123456
-```
+### 4. 应用管理
+- **应用创建**：支持多种测评类型
+- **题目管理**：灵活的题目配置
+- **结果分析**：测评结果统计和分析
 
-2）修改 `application.yml` 中的 session 存储方式：
+### 5. 分布式会话
+- **Session共享**：Spring Session + Redis
+- **集群支持**：支持多实例部署
 
-```yml
-spring:
-  session:
-    store-type: redis
-```
+## 💡 技术成长
 
-3）移除 `MainApplication` 类开头 `@SpringBootApplication` 注解内的 exclude 参数：
+### 核心技能提升
+- **AI应用开发**：掌握大模型API集成，理解AI在业务场景中的应用
+- **系统架构设计**：学习分层架构和设计模式的实际应用
+- **性能优化实践**：理解分库分表、缓存策略等高并发解决方案
+- **工程化开发**：掌握企业级项目的开发规范和最佳实践
 
-修改前：
+### 技术深度体现
+- **Spring生态**：深入理解Spring Boot、Spring Security、Spring Session
+- **数据库设计**：学习复杂业务场景下的数据建模
+- **分布式系统**：理解缓存、会话共享等分布式概念
+- **代码质量**：学习异常处理、日志记录、单元测试等工程实践
 
-```java
-@SpringBootApplication(exclude = {RedisAutoConfiguration.class})
-```
+## 🚀 快速开始
 
-修改后：
+### 环境要求
+- JDK 1.8+
+- Maven 3.6+
+- MySQL 8.0+
+- Redis 6.0+
 
+### 运行步骤
+1. **克隆项目**
+   ```bash
+   git clone [你的仓库地址]
+   cd lingti-qa-studio-backend
+   ```
 
-```java
-@SpringBootApplication
-```
+2. **数据库初始化**
+   ```bash
+   # 执行SQL脚本
+   mysql -u root -p < sql/create_table.sql
+   mysql -u root -p < sql/init_data.sql
+   ```
 
-### Elasticsearch 搜索引擎
+3. **配置文件**
+   ```yaml
+   # 修改 application.yml 中的数据库和Redis配置
+   spring:
+     datasource:
+       url: jdbc:mysql://localhost:3306/your_db
+       username: your_username
+       password: your_password
+   ```
 
-1）修改 `application.yml` 的 Elasticsearch 配置为你自己的：
+4. **启动项目**
+   ```bash
+   mvn spring-boot:run
+   ```
 
-```yml
-spring:
-  elasticsearch:
-    uris: http://localhost:9200
-    username: root
-    password: 123456
-```
-
-2）复制 `sql/post_es_mapping.json` 文件中的内容，通过调用 Elasticsearch 的接口或者 Kibana Dev Tools 来创建索引（相当于数据库建表）
-
-```
-PUT post_v1
-{
- 参数见 sql/post_es_mapping.json 文件
-}
-```
-
-这步不会操作的话需要补充下 Elasticsearch 的知识，或者自行百度一下~
-
-3）开启同步任务，将数据库的帖子同步到 Elasticsearch
-
-找到 job 目录下的 `FullSyncPostToEs` 和 `IncSyncPostToEs` 文件，取消掉 `@Component` 注解的注释，再次执行程序即可触发同步：
-
-```java
-// todo 取消注释开启任务
-//@Component
-```
-
-### 业务代码生成器
-
-支持自动生成 Service、Controller、数据模型代码，配合 MyBatisX 插件，可以快速开发增删改查等实用基础功能。
-
-找到 `generate.CodeGenerator` 类，修改生成参数和生成路径，并且支持注释掉不需要的生成逻辑，然后运行即可。
-
-```
-// 指定生成参数
-String packageName = "com.yupi.yudada";
-String dataName = "用户评论";
-String dataKey = "userComment";
-String upperDataKey = "UserComment";
-```
-
-生成代码后，可以移动到实际项目中，并且按照 `// todo` 注释的提示来针对自己的业务需求进行修改。
+5. **访问应用**
+   - API文档：http://localhost:8080/doc.html
+   - 后端接口：http://localhost:8080/api
