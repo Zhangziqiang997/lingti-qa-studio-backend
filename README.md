@@ -133,7 +133,3 @@
    ```bash
    mvn spring-boot:run
    ```
-
-5. **访问应用**
-   - API文档：http://localhost:8080/doc.html
-   - 后端接口：http://localhost:8080/api
